@@ -1,0 +1,20 @@
+Comprensión y trato correcto
+0. Traducir y/o leer Ethical Guidelines y Getting Started.docx
+1. Seleccionar pregunta a responder, abrir set de datos (Medium) en viewer/Stata. Considerar Other y Supplement.
+2. Identificar relacion con los datos en visualizacion, usar Getting Started para guia.
+
+Análisis
+0. A partir de los datos y la pregunta a tratar, crear un "entendimiento" estadístico de estos (una opinion), que se conforme a las guias éticas (punto B, D), luego identificar relaciones, y a partir de un proceso inferencial, argumentativo y principalmente estadístico determinar un bosquejo para dar una respuesta lógica, valida y ética (punto A, E)
+Con el uso de asesoria de IA, correo al profesor asignado, conocimiento estadístico adquirido y 
+recomendado e investigación verídica (conforme a la guía ética), usar en Stata u otro software de analisis las herramientas necesarias para responder como reforzar la respuesta estadísticamente.
+2. Finalmente, cuando se tenga suficiente claridad para dar una respuesta, crear una grafica, animación, o simplemente una forma elegante, concisa, simple y rápida de representar la respuesta creada.
+3. Formular una respuesta de 33 segundos para la pregunta designada, de acuerdo a los principios:
+Rapidez, precision, validez, simplicidad, eticidad.
+
+
+Only bring in OtherVariants once you want to ask questions about projection uncertainty (see Section 5).
+
+The OtherVariants file is not required, but it's there for any team that wants to go further and interrogate that uncertainty directly. It covers 2024–2101 only, and includes:
+    • Alternative scenarios: High, Low, Constant fertility, Constant mortality, Zero migration, Instant replacement, Momentum, No fertility below age 18, and several more
+    • Probabilistic intervals: Lower 80 PI, Upper 80 PI, Lower 95 PI, Upper 95 PI, Median PI, Mean — confidence-interval-style bounds from the UN's probabilistic projection model
+A solid submission can be built entirely from the Medium file. 
