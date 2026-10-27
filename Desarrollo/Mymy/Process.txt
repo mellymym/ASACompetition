@@ -1,0 +1,17 @@
+7. How do fertility, mortality, and migration act together to shape a country's overall population trajectory — and does that relationship differ across regions or income levels?
+8. Is there a single indicator in this dataset that tells the whole story on its own, or does the interesting story only emerge once you look at several together?
+3. (Optional, uses OtherVariants) How sensitive is a given country's 2100 population projection to the fertility assumption alone (compare Medium vs. Constant fertility vs. High/Low)?
+
+ScriptPlan:
+Proactively address limitations: Spend a few seconds discussing potential biases in the database or constraints in your Stata models. Judges view self-awareness and methodological honesty as signs of high professional maturity.
+Anchor your choices in logic: When explaining why you chose specific variables or functional forms, frame it around objective validation rather than subjective preference.
+Find an ethical framework where to hold in the statistical results.
+
+Responsibilities:
+I have to do translation, video editing, video planning.
+
+Tasks: (Consider: Doing video in english)
+Apply hotfix to codes, debug and graph, fix the graphs.
+Create a proper script for each graph, then create a general script, time it and review it.
+Create a proper style presentation, then decorate it and adapt it to the script.
+Review appropriately, record the video, create the translation if necessary.
