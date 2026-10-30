@@ -1,0 +1,135 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Components of population growth</title><style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#14171c;--mute:#5b6472;--line:#e3e6eb;--grid:#eceef2;--shadow:0 1px 2px rgba(20,23,28,.05),0 8px 24px rgba(20,23,28,.06);
+--blue:#1f77b4;--red:#d62728;--green:#2ca02c;--orange:#ff7f0e;--violet:#9467bd;--lime:#a6c800;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1217;--card:#181c23;--ink:#eef1f5;--mute:#9aa3b2;--line:#272d37;--grid:#222832;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1217;--card:#181c23;--ink:#eef1f5;--mute:#9aa3b2;--line:#272d37;--grid:#222832;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1100px;margin:auto;padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ttl{display:flex;flex-direction:column;min-width:0}.ttl b{font-size:16px;letter-spacing:-.01em}.ttl span{color:var(--mute);font-size:13px}
+.ctrl{display:flex;gap:8px}
+.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;transition:transform .15s,background .2s}
+.btn:hover{background:var(--grid)}.btn:active{transform:scale(.96)}.btn.pri{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+main{max-width:1100px;margin:auto;padding:16px;display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:16px}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:6px 24px;align-items:center}
+.year{font-size:clamp(56px,13vw,108px);font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.side{display:grid;gap:10px;min-width:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{font:inherit;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:opacity .25s,background .2s}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--mute))}
+.chip.off{opacity:.45}.chip.off i{background:transparent;box-shadow:inset 0 0 0 2px var(--c)}
+.chip.static{cursor:default;background:var(--grid)}.chip.live{background:var(--lime);border-color:var(--lime);color:#1b2200}
+.chip.sp[aria-pressed=true]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.plot{width:100%;height:auto;display:block;overflow:visible;touch-action:pan-y}
+.plot text{fill:var(--mute);font-size:11px;font-family:inherit}.plot .ax{font-size:12px}
+.plot .gl{stroke:var(--grid);stroke-width:1}.plot .band{fill:var(--lime);opacity:.07}
+.plot .xl{stroke:var(--mute);stroke-dasharray:4 4;opacity:.7}.plot .zr{stroke:var(--mute);stroke-dasharray:6 4;opacity:.55}
+.plot .ghost{fill:none;stroke-width:2.4;opacity:.2;stroke-linejoin:round}.plot .live{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.plot .dot{stroke:var(--card);stroke-width:2.5}.plot .hdot{stroke:var(--card);stroke-width:2}
+.plot .hl{stroke:var(--ink);opacity:.3}
+.plot g.s{transition:opacity .35s}.plot g.s.off{opacity:0}.leaving .live,.leaving .dot,.leaving .ghost{opacity:0!important}
+.live,.dot,.ghost{transition:opacity .35s}
+.note{color:var(--mute);font-size:12.5px;margin:2px 4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid .card{padding:12px}.ph{display:flex;align-items:center;gap:10px;margin-bottom:4px;font-weight:700;font-size:14px}
+.badge{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--grid);box-shadow:0 0 0 2px var(--c,var(--line));font-size:17px;line-height:1;flex:none}
+.tip{position:fixed;z-index:20;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .15s;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:10px 12px;min-width:170px;font-size:13px}
+.tip.on{opacity:1}.tip .h{display:flex;align-items:center;gap:10px;margin-bottom:6px}.tip .h b{font-size:14px;display:block}.tip .h small{color:var(--mute)}
+.tip .r{display:flex;align-items:center;gap:8px;padding:2px 0}.tip .r .badge{width:20px;height:20px;font-size:11px}.tip .r span{flex:1}.tip .r strong{font-variant-numeric:tabular-nums}
+.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*90ms)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:540px){.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.rise{animation:none}*{transition:none!important}}
+</style></head><body>
+<header class="bar"><div class="bar-in"><div class="ttl"><b>Components of population growth</b><span>Natural change vs. net migration (per 1,000 inhabitants)</span></div>
+<div class="ctrl"><button class="btn pri" id="play">▶ Play</button><button class="btn" id="rst">↺ Restart</button></div></div></header>
+<main>
+<section class="card hero rise" style="--i:0"><div class="year" id="year">1950</div>
+<div class="side"><div class="row"><span class="chip static live" id="phase">Observed data</span>
+<button class="chip sp" data-v="8.5" aria-pressed="false">0.5×</button><button class="chip sp" data-v="17" aria-pressed="true">1×</button><button class="chip sp" data-v="34" aria-pressed="false">2×</button></div>
+<input type="range" id="scrub" min="1950" max="2100" step="1" value="1950" aria-label="Year"></div></section>
+<section class="row rise" style="--i:1" id="chips"></section>
+<section class="grid" id="stage"></section>
+<p class="note rise" style="--i:4">Source: UN, World Population Prospects. Vertical dotted line: start of projections.</p></main>
+<div class="tip" id="tip"></div>
+<script>
+const NS="http://www.w3.org/2000/svg",Y0=1950,Y1=2100,PROJ=2023.5,N=Y1-Y0;
+const $=s=>document.querySelector(s);
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const fmt=(v,d=1)=>v.toLocaleString("en",{minimumFractionDigits:d,maximumFractionDigits:d});
+const col=c=>`var(--${c})`;
+const tip=$("#tip");
+function showTip(html,e){tip.innerHTML=html;tip.classList.add("on");const w=tip.offsetWidth,h=tip.offsetHeight;
+ let x=e.clientX+16,y=e.clientY-h/2;if(x+w>innerWidth-8)x=e.clientX-w-16;y=Math.max(8,Math.min(innerHeight-h-8,y));tip.style.transform=`translate(${x}px,${y}px)`}
+const hideTip=()=>tip.classList.remove("on");
+function Panel(host,o){
+ const {W,H,m}=o,svg=el("svg",{viewBox:`0 0 ${W} ${H}`,class:"plot",role:"img","aria-label":o.label},host);
+ const X=y=>m.l+(y-Y0)/N*(W-m.l-m.r),Y=v=>H-m.b-(v-o.y[0])/(o.y[1]-o.y[0])*(H-m.t-m.b);
+ el("rect",{x:X(PROJ),y:m.t,width:X(Y1)-X(PROJ),height:H-m.t-m.b,class:"band"},svg);
+ for(let v=o.y[0];v<=o.y[1];v+=o.y[2]){el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),class:"gl"},svg);
+  el("text",{x:m.l-8,y:Y(v)+4,"text-anchor":"end"},svg).textContent=v}
+ o.xt.forEach(t=>el("text",{x:X(t),y:H-m.b+17,"text-anchor":"middle"},svg).textContent=t);
+ if(o.zero)el("line",{x1:m.l,x2:W-m.r,y1:Y(0),y2:Y(0),class:"zr"},svg);
+ el("line",{x1:X(PROJ),x2:X(PROJ),y1:m.t,y2:H-m.b,class:"xl"},svg);
+ el("text",{x:X(PROJ)+6,y:m.t+12},svg).textContent="Projection";
+ if(o.xtitle)el("text",{x:(m.l+W-m.r)/2,y:H-4,"text-anchor":"middle",class:"ax"},svg).textContent=o.xtitle;
+ if(o.ytitle)el("text",{transform:`translate(13 ${(m.t+H-m.b)/2}) rotate(-90)`,"text-anchor":"middle",class:"ax"},svg).textContent=o.ytitle;
+ const hl=el("line",{y1:m.t,y2:H-m.b,class:"hl",opacity:0},svg);
+ const S=o.series.map(s=>{const g=el("g",{class:"s"},svg),pts=s.vals.map((v,i)=>[X(Y0+i),Y(v)]);
+  el("path",{d:"M"+pts.map(p=>p.join(",")).join("L"),class:"ghost",stroke:col(s.color)},g);
+  return {s,g,pts,live:el("path",{class:"live",stroke:col(s.color)},g),dot:el("circle",{r:5.5,fill:col(s.color),class:"dot"},g),
+   h:el("circle",{r:4,fill:col(s.color),class:"hdot",opacity:0},svg)}});
+ const ov=el("rect",{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:"transparent"},svg);
+ let cur=Y0;
+ const yearAt=e=>{const r=svg.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W;
+  return Math.max(Y0,Math.min(Math.floor(cur),Math.round(Y0+(px-m.l)/(W-m.l-m.r)*N)))};
+ const leave=()=>{hl.setAttribute("opacity",0);S.forEach(a=>a.h.setAttribute("opacity",0));hideTip()};
+ ov.addEventListener("pointermove",e=>{const y=yearAt(e),i=y-Y0;hl.setAttribute("x1",X(y));hl.setAttribute("x2",X(y));hl.setAttribute("opacity",1);
+  S.forEach(a=>{a.h.setAttribute("cx",a.pts[i][0]);a.h.setAttribute("cy",a.pts[i][1]);a.h.setAttribute("opacity",a.g.classList.contains("off")?0:1)});
+  o.onHover(y,e,i)});
+ ov.addEventListener("pointerleave",leave);
+ return {S,svg,
+  draw(c){cur=c;const i=Math.min(Math.floor(c-Y0),N),f=c-Y0-i;
+   S.forEach(a=>{const p=a.pts.slice(0,i+1);if(i<N){const q=a.pts[i],n=a.pts[i+1];p.push([q[0]+(n[0]-q[0])*f,q[1]+(n[1]-q[1])*f])}
+    a.live.setAttribute("d","M"+p.map(x=>x.join(",")).join("L"));const t=p[p.length-1];a.dot.setAttribute("cx",t[0]);a.dot.setAttribute("cy",t[1])})},
+  show(k,on){S.forEach(a=>{if(a.s.key===k)a.g.classList.toggle("off",!on)})}}}
+const P={cur:Y0,playing:false,speed:17,last:0,subs:[]};
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function render(){const y=Math.floor(P.cur);$("#year").textContent=y;$("#scrub").value=y;
+ const live=P.cur>=PROJ;const ph=$("#phase");ph.textContent=live?"Projection":"Observed data";ph.classList.toggle("live",live);
+ $("#play").textContent=P.playing?"❚❚ Pause":(P.cur>=Y1?"↺ Replay":"▶ Play");P.subs.forEach(f=>f(P.cur))}
+function frame(t){if(!P.playing)return;const dt=Math.min(.1,(t-P.last)/1000);P.last=t;P.cur=Math.min(Y1,P.cur+dt*P.speed);
+ if(P.cur>=Y1)P.playing=false;render();if(P.playing)requestAnimationFrame(frame)}
+function play(){if(P.cur>=Y1)P.cur=Y0;P.playing=true;P.last=performance.now();render();requestAnimationFrame(frame)}
+function pause(){P.playing=false;render()}
+function restart(){P.playing=false;document.body.classList.add("leaving");
+ setTimeout(()=>{P.cur=Y0;render();document.body.classList.remove("leaving");play()},reduce?0:400)}
+$("#play").onclick=()=>P.playing?pause():play();$("#rst").onclick=restart;
+$("#scrub").oninput=e=>{P.playing=false;P.cur=+e.target.value;render()};
+document.querySelectorAll(".sp").forEach(b=>b.onclick=()=>{P.speed=+b.dataset.v;document.querySelectorAll(".sp").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+function start(){render();if(reduce){P.cur=Y1;render()}else setTimeout(play,1000)}
+
+const D=[{"name":"Latin America and the Caribbean","flag":"🌎","nat":[26.16,26.61,27.02,27.39,27.73,27.97,28.24,28.42,28.59,28.73,28.83,28.86,28.87,28.77,28.52,28.14,27.73,27.29,26.85,26.51,26.07,26.1,25.86,25.65,25.34,25.18,24.94,24.84,24.6,24.29,23.95,23.73,23.44,23.2,22.8,22.35,22.1,21.6,21.13,20.72,20.27,19.87,19.4,19.08,18.72,18.34,17.9,17.54,17.07,16.63,16.13,15.6,15.14,14.64,14.28,13.96,13.54,13.16,12.89,12.61,12.17,12.12,11.8,11.53,11.28,10.9,10.24,9.91,9.65,9.11,7.26,6.05,7.36,7.59,7.39,7.09,6.81,6.55,6.29,6.05,5.81,5.57,5.33,5.1,4.86,4.62,4.38,4.14,3.9,3.64,3.39,3.14,2.88,2.64,2.39,2.15,1.91,1.67,1.44,1.21,0.99,0.77,0.56,0.35,0.14,-0.06,-0.26,-0.46,-0.66,-0.85,-1.03,-1.22,-1.4,-1.57,-1.74,-1.91,-2.09,-2.25,-2.42,-2.59,-2.75,-2.92,-3.07,-3.22,-3.38,-3.52,-3.67,-3.81,-3.96,-4.09,-4.23,-4.36,-4.48,-4.59,-4.7,-4.81,-4.92,-5.02,-5.1,-5.18,-5.26,-5.34,-5.41,-5.47,-5.54,-5.59,-5.64,-5.68,-5.72,-5.75,-5.78],"mig":[-0.48,-0.57,-0.74,-0.94,-1.04,-1.13,-1.2,-1.28,-1.41,-1.36,-1.37,-1.23,-1.32,-1.36,-1.4,-1.41,-1.44,-1.45,-1.5,-1.56,-1.69,-1.84,-1.87,-1.87,-1.93,-2.06,-2.13,-1.99,-1.96,-1.96,-1.93,-2.3,-2.11,-1.92,-1.91,-1.92,-2.15,-1.97,-1.79,-1.8,-1.52,-1.87,-1.55,-1.91,-1.83,-1.84,-1.82,-1.79,-1.46,-1.66,-1.9,-2.01,-2.0,-2.01,-1.97,-1.96,-1.8,-1.54,-1.52,-1.55,-1.51,-1.38,-1.37,-1.26,-1.32,-1.32,-0.94,-1.22,-1.2,-1.36,-0.94,-0.85,-0.61,-0.56,-0.58,-0.61,-0.61,-0.56,-0.57,-0.54,-0.53,-0.51,-0.49,-0.47,-0.45,-0.43,-0.43,-0.42,-0.4,-0.39,-0.38,-0.38,-0.36,-0.37,-0.37,-0.37,-0.36,-0.34,-0.34,-0.37,-0.33,-0.35,-0.34,-0.35,-0.35,-0.34,-0.35,-0.35,-0.33,-0.35,-0.35,-0.34,-0.34,-0.35,-0.34,-0.36,-0.35,-0.35,-0.34,-0.34,-0.34,-0.32,-0.32,-0.33,-0.31,-0.31,-0.3,-0.31,-0.31,-0.31,-0.31,-0.3,-0.29,-0.28,-0.28,-0.29,-0.29,-0.28,-0.28,-0.29,-0.29,-0.28,-0.28,-0.29,-0.28,-0.29,-0.29,-0.28,-0.28,-0.27,-0.28]},{"name":"Asia","flag":"🌏","nat":[18.88,19.03,22.02,21.25,22.58,22.78,21.99,23.65,22.06,17.16,14.63,16.08,24.41,27.55,25.39,24.59,23.93,23.27,25.16,24.55,24.46,22.96,23.14,22.67,21.59,20.27,19.74,19.07,19.05,19.65,19.87,20.11,20.65,19.59,19.89,19.99,20.37,20.47,19.8,19.74,19.59,17.69,16.97,16.44,15.99,15.55,15.1,14.68,14.3,13.99,14.06,13.64,13.3,12.98,12.73,12.5,12.4,12.33,12.24,12.24,12.0,11.79,11.95,11.44,11.17,10.7,10.62,10.14,9.34,8.84,7.51,6.16,6.93,6.61,6.48,6.29,6.18,5.96,5.75,5.55,5.36,5.16,4.97,4.78,4.59,4.4,4.21,4.01,3.82,3.62,3.42,3.22,3.01,2.81,2.6,2.37,2.15,1.9,1.66,1.42,1.17,0.93,0.68,0.45,0.21,-0.0,-0.2,-0.4,-0.58,-0.75,-0.91,-1.05,-1.18,-1.3,-1.41,-1.52,-1.62,-1.73,-1.84,-1.95,-2.06,-2.16,-2.28,-2.4,-2.52,-2.64,-2.76,-2.88,-3.01,-3.13,-3.24,-3.35,-3.44,-3.54,-3.62,-3.7,-3.76,-3.82,-3.88,-3.93,-3.98,-4.03,-4.08,-4.13,-4.18,-4.24,-4.28,-4.33,-4.38,-4.43,-4.47],"mig":[0.32,0.47,0.49,0.28,0.41,0.35,0.47,0.07,0.34,0.32,0.17,0.08,-0.14,-0.09,-0.02,-0.15,-0.23,0.01,-0.26,-0.27,0.03,-0.47,-0.31,-0.42,-0.17,-0.14,-0.11,0.13,-0.28,-0.16,-0.31,-0.28,-0.17,-0.03,-0.18,-0.26,-0.14,-0.15,-0.19,-0.18,-0.52,-0.25,-0.07,-0.38,-0.55,-0.28,-0.18,-0.14,-0.11,-0.23,-0.29,-0.3,-0.78,-0.47,-0.45,-0.33,-0.23,-0.49,-0.4,-0.27,-0.3,-0.2,-0.31,-0.46,-0.39,-0.69,-0.62,-0.79,-0.78,-0.67,-0.38,-0.44,-0.25,-0.55,-0.49,-0.49,-0.42,-0.38,-0.37,-0.35,-0.34,-0.34,-0.34,-0.34,-0.36,-0.37,-0.35,-0.35,-0.34,-0.32,-0.33,-0.33,-0.34,-0.33,-0.32,-0.31,-0.31,-0.32,-0.31,-0.3,-0.31,-0.33,-0.32,-0.29,-0.3,-0.29,-0.29,-0.29,-0.3,-0.32,-0.3,-0.32,-0.29,-0.29,-0.29,-0.29,-0.3,-0.31,-0.28,-0.29,-0.28,-0.3,-0.3,-0.28,-0.3,-0.32,-0.3,-0.32,-0.32,-0.29,-0.3,-0.32,-0.31,-0.32,-0.3,-0.31,-0.34,-0.31,-0.31,-0.31,-0.31,-0.3,-0.29,-0.3,-0.3,-0.29,-0.31,-0.31,-0.31,-0.3,-0.31]},{"name":"Europe","flag":"🌍","nat":[10.4,9.84,10.27,10.17,10.45,10.51,10.56,10.56,10.81,10.74,10.54,10.32,9.38,9.1,8.93,8.01,7.67,7.49,6.75,6.24,6.09,6.09,5.8,5.33,5.42,4.92,4.74,4.64,4.35,4.22,4.08,3.87,4.0,3.82,3.65,3.37,3.77,3.74,3.4,2.82,2.26,1.58,0.79,-0.46,-0.85,-1.21,-1.11,-1.03,-1.12,-1.58,-1.5,-1.57,-1.67,-1.65,-1.13,-1.25,-0.73,-0.38,0.0,0.15,0.1,0.19,0.16,0.02,0.11,-0.27,-0.14,-0.63,-1.08,-1.34,-3.02,-3.62,-3.07,-2.62,-2.9,-3.03,-3.17,-3.29,-3.39,-3.49,-3.57,-3.64,-3.7,-3.74,-3.78,-3.8,-3.81,-3.83,-3.84,-3.86,-3.88,-3.91,-3.95,-3.99,-4.06,-4.14,-4.24,-4.36,-4.48,-4.61,-4.76,-4.9,-5.05,-5.19,-5.32,-5.45,-5.56,-5.65,-5.72,-5.78,-5.82,-5.83,-5.83,-5.81,-5.77,-5.72,-5.67,-5.61,-5.54,-5.45,-5.37,-5.29,-5.2,-5.12,-5.03,-4.96,-4.89,-4.81,-4.75,-4.68,-4.62,-4.56,-4.5,-4.44,-4.39,-4.34,-4.29,-4.24,-4.2,-4.16,-4.13,-4.11,-4.09,-4.09,-4.1,-4.12,-4.14,-4.17,-4.2,-4.24,-4.28],"mig":[-0.98,-1.24,-1.07,-0.3,-0.56,-0.5,-0.81,0.34,0.08,-0.85,-0.54,-0.46,0.13,0.0,-0.28,-0.01,0.04,-0.58,0.3,0.62,-1.15,0.98,0.9,0.79,0.2,-0.06,0.35,0.37,0.37,0.68,1.23,0.35,-0.04,0.28,0.29,0.69,0.76,0.62,1.18,1.07,1.36,1.26,-0.51,1.25,2.47,0.96,1.34,0.96,-0.35,1.27,1.66,1.61,4.07,2.68,2.48,2.09,1.64,2.78,2.09,1.51,1.52,1.48,1.14,1.41,1.61,2.84,2.31,2.29,2.46,2.46,1.95,2.26,0.02,2.03,2.1,1.99,1.75,1.72,1.69,1.64,1.61,1.52,1.59,1.6,1.59,1.56,1.51,1.5,1.5,1.45,1.51,1.54,1.56,1.5,1.52,1.53,1.56,1.53,1.53,1.5,1.54,1.54,1.58,1.45,1.48,1.42,1.46,1.49,1.49,1.49,1.54,1.52,1.54,1.53,1.52,1.5,1.54,1.57,1.53,1.5,1.5,1.48,1.51,1.46,1.45,1.53,1.53,1.46,1.49,1.48,1.52,1.55,1.52,1.51,1.48,1.45,1.44,1.47,1.47,1.42,1.39,1.44,1.4,1.45,1.47,1.41,1.36,1.39,1.41,1.38,1.36]},{"name":"North America","flag":"🌎","nat":[14.61,14.96,15.32,15.4,16.14,15.84,16.03,15.95,16.0,15.76,15.3,15.07,13.91,12.92,12.4,10.79,9.61,8.97,8.36,8.81,9.32,8.36,6.78,6.17,6.37,6.49,6.48,7.11,7.05,7.62,7.6,7.63,7.73,7.34,7.24,7.18,6.99,7.04,7.15,7.61,7.84,7.47,7.12,6.38,6.04,5.63,5.45,5.28,5.27,5.09,5.26,5.1,4.92,5.04,5.24,5.16,5.58,5.7,5.37,5.14,4.66,4.36,4.28,4.07,4.11,3.84,3.64,3.18,2.91,2.7,0.82,0.65,1.52,1.9,1.68,1.57,1.46,1.33,1.22,1.11,1.01,0.89,0.79,0.7,0.59,0.5,0.42,0.31,0.21,0.11,-0.01,-0.14,-0.28,-0.41,-0.54,-0.65,-0.79,-0.92,-1.03,-1.13,-1.22,-1.29,-1.34,-1.37,-1.38,-1.38,-1.36,-1.35,-1.32,-1.28,-1.22,-1.18,-1.13,-1.09,-1.05,-1.02,-0.99,-0.98,-0.98,-0.98,-0.99,-1.04,-1.08,-1.13,-1.17,-1.23,-1.28,-1.33,-1.37,-1.43,-1.47,-1.51,-1.54,-1.57,-1.58,-1.57,-1.57,-1.57,-1.56,-1.53,-1.51,-1.52,-1.51,-1.51,-1.53,-1.53,-1.56,-1.58,-1.61,-1.64,-1.66],"mig":[0.67,0.71,0.56,0.66,0.35,0.63,0.82,1.03,0.54,2.32,2.38,3.05,3.22,3.31,3.24,3.52,3.59,3.25,3.14,2.73,4.58,4.49,3.92,3.82,3.59,3.28,3.03,2.62,2.44,2.34,2.82,2.71,2.65,2.78,2.56,2.5,2.28,2.39,2.54,2.37,4.5,4.69,5.0,4.67,4.46,4.41,4.31,4.15,4.46,4.25,4.64,4.86,4.84,4.71,4.64,4.79,4.67,4.73,4.89,4.77,5.27,5.31,5.32,5.35,5.2,5.37,6.07,6.06,5.87,5.76,1.55,2.31,4.68,4.59,4.29,4.02,3.77,3.72,3.81,3.67,3.68,3.68,3.67,3.64,3.72,3.63,3.63,3.65,3.67,3.57,3.56,3.56,3.67,3.59,3.57,3.57,3.51,3.59,3.56,3.56,3.61,3.63,3.6,3.59,3.47,3.43,3.46,3.57,3.66,3.57,3.47,3.56,3.57,3.54,3.46,3.5,3.55,3.61,3.55,3.61,3.5,3.62,3.5,3.54,3.5,3.66,3.59,3.51,3.54,3.45,3.43,3.67,3.49,3.52,3.47,3.32,3.43,3.42,3.57,3.43,3.35,3.45,3.42,3.39,3.43,3.39,3.31,3.38,3.27,3.29,3.17]},{"name":"Africa","flag":"🌍","nat":[20.86,21.49,22.01,22.51,22.83,23.21,23.56,23.41,23.73,24.5,24.65,24.94,25.28,25.55,25.72,25.8,25.86,26.05,26.36,26.51,26.8,27.1,27.1,27.45,27.64,27.91,28.36,28.59,28.75,29.03,29.19,29.24,29.32,28.7,28.48,28.42,28.31,28.36,27.83,27.86,27.38,26.93,26.55,26.48,25.04,26.22,25.96,25.77,25.42,25.72,25.89,25.92,25.92,26.04,26.22,26.45,26.63,26.77,26.95,26.73,26.98,26.74,26.81,26.6,26.29,25.96,25.51,25.16,24.8,24.36,23.78,23.2,23.39,23.45,23.17,22.83,22.51,22.18,21.87,21.57,21.25,20.94,20.62,20.31,20.0,19.69,19.38,19.05,18.76,18.47,18.17,17.86,17.57,17.27,16.96,16.65,16.35,16.05,15.76,15.46,15.17,14.88,14.6,14.32,14.04,13.76,13.49,13.22,12.96,12.7,12.44,12.19,11.93,11.67,11.42,11.17,10.93,10.69,10.45,10.21,9.97,9.73,9.5,9.27,9.03,8.8,8.58,8.35,8.12,7.9,7.67,7.46,7.25,7.04,6.83,6.62,6.41,6.2,6.01,5.81,5.61,5.42,5.23,5.04,4.86,4.68,4.5,4.33,4.16,3.99,3.83],"mig":[-0.35,-0.47,-0.63,-1.02,-0.94,-0.98,-1.07,-1.22,-1.8,-0.99,-0.76,-0.87,-0.81,-0.88,-0.66,-0.7,-0.29,-0.07,-0.06,-0.27,-0.27,-0.86,-0.84,0.08,-0.12,0.6,-0.02,-1.19,1.16,0.14,-0.17,1.15,1.0,-0.31,0.62,0.58,0.12,0.15,-0.47,-0.29,-0.1,-1.08,-0.3,-0.2,-0.61,-0.38,-1.18,-0.85,-0.11,-0.78,-0.85,-0.78,-0.7,-0.79,-0.67,-0.92,-1.08,-1.02,-0.94,-0.94,-0.93,-1.35,-0.71,-0.35,-0.68,-0.35,-0.72,0.07,0.03,-0.22,0.18,-0.01,-0.25,-0.29,-0.43,-0.24,-0.28,-0.38,-0.42,-0.41,-0.41,-0.37,-0.39,-0.39,-0.36,-0.31,-0.34,-0.33,-0.35,-0.35,-0.35,-0.35,-0.36,-0.35,-0.36,-0.38,-0.38,-0.35,-0.36,-0.37,-0.37,-0.32,-0.35,-0.36,-0.34,-0.32,-0.33,-0.35,-0.35,-0.29,-0.32,-0.29,-0.34,-0.34,-0.31,-0.32,-0.33,-0.31,-0.34,-0.32,-0.32,-0.31,-0.3,-0.32,-0.29,-0.29,-0.31,-0.27,-0.27,-0.3,-0.3,-0.31,-0.29,-0.28,-0.3,-0.26,-0.23,-0.28,-0.31,-0.26,-0.26,-0.3,-0.29,-0.29,-0.29,-0.29,-0.26,-0.27,-0.26,-0.27,-0.24]}];
+const SER=[{key:"nat",name:"Natural Change",color:"blue"},{key:"mig",name:"Net Migration",color:"orange"}];
+const badge=(f,c)=>`<span class="badge" style="--c:${c}">${f}</span>`;
+const panels=D.map((d,k)=>{const c=document.createElement("section");c.className="card rise";c.style.setProperty("--i",2+k*.6);
+ c.innerHTML=`<div class="ph">${badge(d.flag,"var(--line)")}${d.name}</div>`;$("#stage").appendChild(c);
+ const p=Panel(c,{W:400,H:270,m:{l:38,r:12,t:10,b:26},y:[-10,30,10],xt:[1950,2000,2050,2100],zero:true,label:d.name+": natural change and net migration",
+  series:SER.map(s=>({...s,vals:d[s.key]})),
+  onHover:(y,e,i)=>showTip(`<div class="h">${badge(d.flag,"var(--line)")}<div><b>${d.name}</b><small>${y} · ${y>PROJ?"Projection":"Observed data"}</small></div></div>`+
+   SER.filter(s=>!$(`[data-k=${s.key}]`).classList.contains("off")).map(s=>`<div class="r"><i class="badge" style="width:10px;height:10px;background:${col(s.color)};box-shadow:none"></i><span>${s.name}</span><strong>${fmt(d[s.key][i],2)}</strong></div>`).join(""),e)});
+ P.subs.push(p.draw);return p});
+$("#chips").innerHTML=SER.map(s=>`<button class="chip" style="--c:${col(s.color)}" data-k="${s.key}" aria-pressed="true"><i></i>${s.name}</button>`).join("")+`<span class="chip static">Rate per 1,000 inhabitants</span>`;
+document.querySelectorAll("#chips .chip[data-k]").forEach(b=>b.onclick=()=>{const off=!b.classList.toggle("off");b.setAttribute("aria-pressed",off);panels.forEach(p=>p.show(b.dataset.k,off))});
+start();
+</script></body></html>

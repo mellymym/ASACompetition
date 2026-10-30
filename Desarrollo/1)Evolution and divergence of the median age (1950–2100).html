@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evolution and divergence of the median age (1950–2100)</title><style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#14171c;--mute:#5b6472;--line:#e3e6eb;--grid:#eceef2;--shadow:0 1px 2px rgba(20,23,28,.05),0 8px 24px rgba(20,23,28,.06);
+--blue:#1f77b4;--red:#d62728;--green:#2ca02c;--orange:#ff7f0e;--violet:#9467bd;--lime:#a6c800;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1217;--card:#181c23;--ink:#eef1f5;--mute:#9aa3b2;--line:#272d37;--grid:#222832;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1217;--card:#181c23;--ink:#eef1f5;--mute:#9aa3b2;--line:#272d37;--grid:#222832;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1100px;margin:auto;padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ttl{display:flex;flex-direction:column;min-width:0}.ttl b{font-size:16px;letter-spacing:-.01em}.ttl span{color:var(--mute);font-size:13px}
+.ctrl{display:flex;gap:8px}
+.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;transition:transform .15s,background .2s}
+.btn:hover{background:var(--grid)}.btn:active{transform:scale(.96)}.btn.pri{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+main{max-width:1100px;margin:auto;padding:16px;display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:16px}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:6px 24px;align-items:center}
+.year{font-size:clamp(56px,13vw,108px);font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.side{display:grid;gap:10px;min-width:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{font:inherit;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:opacity .25s,background .2s}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--mute))}
+.chip.off{opacity:.45}.chip.off i{background:transparent;box-shadow:inset 0 0 0 2px var(--c)}
+.chip.static{cursor:default;background:var(--grid)}.chip.live{background:var(--lime);border-color:var(--lime);color:#1b2200}
+.chip.sp[aria-pressed=true]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.plot{width:100%;height:auto;display:block;overflow:visible;touch-action:pan-y}
+.plot text{fill:var(--mute);font-size:11px;font-family:inherit}.plot .ax{font-size:12px}
+.plot .gl{stroke:var(--grid);stroke-width:1}.plot .band{fill:var(--lime);opacity:.07}
+.plot .xl{stroke:var(--mute);stroke-dasharray:4 4;opacity:.7}.plot .zr{stroke:var(--mute);stroke-dasharray:6 4;opacity:.55}
+.plot .ghost{fill:none;stroke-width:2.4;opacity:.2;stroke-linejoin:round}.plot .live{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.plot .dot{stroke:var(--card);stroke-width:2.5}.plot .hdot{stroke:var(--card);stroke-width:2}
+.plot .hl{stroke:var(--ink);opacity:.3}
+.plot g.s{transition:opacity .35s}.plot g.s.off{opacity:0}.leaving .live,.leaving .dot,.leaving .ghost{opacity:0!important}
+.live,.dot,.ghost{transition:opacity .35s}
+.note{color:var(--mute);font-size:12.5px;margin:2px 4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid .card{padding:12px}.ph{display:flex;align-items:center;gap:10px;margin-bottom:4px;font-weight:700;font-size:14px}
+.badge{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--grid);box-shadow:0 0 0 2px var(--c,var(--line));font-size:17px;line-height:1;flex:none}
+.tip{position:fixed;z-index:20;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .15s;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:10px 12px;min-width:170px;font-size:13px}
+.tip.on{opacity:1}.tip .h{display:flex;align-items:center;gap:10px;margin-bottom:6px}.tip .h b{font-size:14px;display:block}.tip .h small{color:var(--mute)}
+.tip .r{display:flex;align-items:center;gap:8px;padding:2px 0}.tip .r .badge{width:20px;height:20px;font-size:11px}.tip .r span{flex:1}.tip .r strong{font-variant-numeric:tabular-nums}
+.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*90ms)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:540px){.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.rise{animation:none}*{transition:none!important}}
+</style></head><body>
+<header class="bar"><div class="bar-in"><div class="ttl"><b>Evolution and divergence of the median age (1950–2100)</b><span>Median age of the population by region, in years</span></div>
+<div class="ctrl"><button class="btn pri" id="play">▶ Play</button><button class="btn" id="rst">↺ Restart</button></div></div></header>
+<main>
+<section class="card hero rise" style="--i:0"><div class="year" id="year">1950</div>
+<div class="side"><div class="row"><span class="chip static live" id="phase">Observed data</span>
+<button class="chip sp" data-v="8.5" aria-pressed="false">0.5×</button><button class="chip sp" data-v="17" aria-pressed="true">1×</button><button class="chip sp" data-v="34" aria-pressed="false">2×</button></div>
+<input type="range" id="scrub" min="1950" max="2100" step="1" value="1950" aria-label="Year"></div></section>
+<section class="row rise" style="--i:1" id="chips"></section>
+<section class="card rise" style="--i:2" id="stage"></section>
+<p class="note rise" style="--i:4">Source: UN, World Population Prospects. Vertical dotted line: start of projections.</p></main>
+<div class="tip" id="tip"></div>
+<script>
+const NS="http://www.w3.org/2000/svg",Y0=1950,Y1=2100,PROJ=2023.5,N=Y1-Y0;
+const $=s=>document.querySelector(s);
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const fmt=(v,d=1)=>v.toLocaleString("en",{minimumFractionDigits:d,maximumFractionDigits:d});
+const col=c=>`var(--${c})`;
+const tip=$("#tip");
+function showTip(html,e){tip.innerHTML=html;tip.classList.add("on");const w=tip.offsetWidth,h=tip.offsetHeight;
+ let x=e.clientX+16,y=e.clientY-h/2;if(x+w>innerWidth-8)x=e.clientX-w-16;y=Math.max(8,Math.min(innerHeight-h-8,y));tip.style.transform=`translate(${x}px,${y}px)`}
+const hideTip=()=>tip.classList.remove("on");
+function Panel(host,o){
+ const {W,H,m}=o,svg=el("svg",{viewBox:`0 0 ${W} ${H}`,class:"plot",role:"img","aria-label":o.label},host);
+ const X=y=>m.l+(y-Y0)/N*(W-m.l-m.r),Y=v=>H-m.b-(v-o.y[0])/(o.y[1]-o.y[0])*(H-m.t-m.b);
+ el("rect",{x:X(PROJ),y:m.t,width:X(Y1)-X(PROJ),height:H-m.t-m.b,class:"band"},svg);
+ for(let v=o.y[0];v<=o.y[1];v+=o.y[2]){el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),class:"gl"},svg);
+  el("text",{x:m.l-8,y:Y(v)+4,"text-anchor":"end"},svg).textContent=v}
+ o.xt.forEach(t=>el("text",{x:X(t),y:H-m.b+17,"text-anchor":"middle"},svg).textContent=t);
+ if(o.zero)el("line",{x1:m.l,x2:W-m.r,y1:Y(0),y2:Y(0),class:"zr"},svg);
+ el("line",{x1:X(PROJ),x2:X(PROJ),y1:m.t,y2:H-m.b,class:"xl"},svg);
+ el("text",{x:X(PROJ)+6,y:m.t+12},svg).textContent="Projection";
+ if(o.xtitle)el("text",{x:(m.l+W-m.r)/2,y:H-4,"text-anchor":"middle",class:"ax"},svg).textContent=o.xtitle;
+ if(o.ytitle)el("text",{transform:`translate(13 ${(m.t+H-m.b)/2}) rotate(-90)`,"text-anchor":"middle",class:"ax"},svg).textContent=o.ytitle;
+ const hl=el("line",{y1:m.t,y2:H-m.b,class:"hl",opacity:0},svg);
+ const S=o.series.map(s=>{const g=el("g",{class:"s"},svg),pts=s.vals.map((v,i)=>[X(Y0+i),Y(v)]);
+  el("path",{d:"M"+pts.map(p=>p.join(",")).join("L"),class:"ghost",stroke:col(s.color)},g);
+  return {s,g,pts,live:el("path",{class:"live",stroke:col(s.color)},g),dot:el("circle",{r:5.5,fill:col(s.color),class:"dot"},g),
+   h:el("circle",{r:4,fill:col(s.color),class:"hdot",opacity:0},svg)}});
+ const ov=el("rect",{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:"transparent"},svg);
+ let cur=Y0;
+ const yearAt=e=>{const r=svg.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W;
+  return Math.max(Y0,Math.min(Math.floor(cur),Math.round(Y0+(px-m.l)/(W-m.l-m.r)*N)))};
+ const leave=()=>{hl.setAttribute("opacity",0);S.forEach(a=>a.h.setAttribute("opacity",0));hideTip()};
+ ov.addEventListener("pointermove",e=>{const y=yearAt(e),i=y-Y0;hl.setAttribute("x1",X(y));hl.setAttribute("x2",X(y));hl.setAttribute("opacity",1);
+  S.forEach(a=>{a.h.setAttribute("cx",a.pts[i][0]);a.h.setAttribute("cy",a.pts[i][1]);a.h.setAttribute("opacity",a.g.classList.contains("off")?0:1)});
+  o.onHover(y,e,i)});
+ ov.addEventListener("pointerleave",leave);
+ return {S,svg,
+  draw(c){cur=c;const i=Math.min(Math.floor(c-Y0),N),f=c-Y0-i;
+   S.forEach(a=>{const p=a.pts.slice(0,i+1);if(i<N){const q=a.pts[i],n=a.pts[i+1];p.push([q[0]+(n[0]-q[0])*f,q[1]+(n[1]-q[1])*f])}
+    a.live.setAttribute("d","M"+p.map(x=>x.join(",")).join("L"));const t=p[p.length-1];a.dot.setAttribute("cx",t[0]);a.dot.setAttribute("cy",t[1])})},
+  show(k,on){S.forEach(a=>{if(a.s.key===k)a.g.classList.toggle("off",!on)})}}}
+const P={cur:Y0,playing:false,speed:17,last:0,subs:[]};
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function render(){const y=Math.floor(P.cur);$("#year").textContent=y;$("#scrub").value=y;
+ const live=P.cur>=PROJ;const ph=$("#phase");ph.textContent=live?"Projection":"Observed data";ph.classList.toggle("live",live);
+ $("#play").textContent=P.playing?"❚❚ Pause":(P.cur>=Y1?"↺ Replay":"▶ Play");P.subs.forEach(f=>f(P.cur))}
+function frame(t){if(!P.playing)return;const dt=Math.min(.1,(t-P.last)/1000);P.last=t;P.cur=Math.min(Y1,P.cur+dt*P.speed);
+ if(P.cur>=Y1)P.playing=false;render();if(P.playing)requestAnimationFrame(frame)}
+function play(){if(P.cur>=Y1)P.cur=Y0;P.playing=true;P.last=performance.now();render();requestAnimationFrame(frame)}
+function pause(){P.playing=false;render()}
+function restart(){P.playing=false;document.body.classList.add("leaving");
+ setTimeout(()=>{P.cur=Y0;render();document.body.classList.remove("leaving");play()},reduce?0:400)}
+$("#play").onclick=()=>P.playing?pause():play();$("#rst").onclick=restart;
+$("#scrub").oninput=e=>{P.playing=false;P.cur=+e.target.value;render()};
+document.querySelectorAll(".sp").forEach(b=>b.onclick=()=>{P.speed=+b.dataset.v;document.querySelectorAll(".sp").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+function start(){render();if(reduce){P.cur=Y1;render()}else setTimeout(play,1000)}
+
+const D=[{"id":0,"name":"Africa","color":"red","flag":"🌍","vals":[18.11,18.1,18.09,18.05,18.0,17.94,17.87,17.79,17.69,17.59,17.49,17.39,17.31,17.23,17.16,17.1,17.03,16.94,16.87,16.8,16.73,16.67,16.61,16.55,16.51,16.47,16.41,16.37,16.35,16.33,16.31,16.3,16.3,16.31,16.33,16.34,16.36,16.39,16.42,16.46,16.52,16.57,16.62,16.68,16.75,16.8,16.82,16.86,16.94,17.04,17.13,17.22,17.31,17.4,17.48,17.56,17.63,17.69,17.75,17.81,17.87,17.92,17.99,18.05,18.11,18.17,18.24,18.32,18.42,18.53,18.65,18.77,18.89,19.03,19.17,19.32,19.48,19.65,19.82,20.01,20.19,20.39,20.58,20.79,20.99,21.2,21.41,21.62,21.83,22.04,22.25,22.47,22.68,22.88,23.09,23.3,23.52,23.73,23.94,24.16,24.38,24.6,24.82,25.05,25.27,25.49,25.72,25.94,26.17,26.4,26.62,26.85,27.08,27.31,27.53,27.76,27.99,28.21,28.44,28.67,28.89,29.12,29.34,29.57,29.79,30.01,30.23,30.45,30.67,30.89,31.11,31.32,31.53,31.75,31.95,32.16,32.37,32.57,32.77,32.97,33.17,33.37,33.57,33.76,33.95,34.14,34.33,34.52,34.7,34.88,35.06]},{"id":1,"name":"Asia","color":"blue","flag":"🌏","vals":[20.55,20.45,20.34,20.21,20.1,19.99,19.89,19.77,19.65,19.58,19.56,19.56,19.46,19.2,18.92,18.69,18.54,18.45,18.37,18.34,18.35,18.39,18.47,18.58,18.71,18.88,19.06,19.27,19.49,19.67,19.81,19.91,19.99,20.13,20.37,20.63,20.89,21.11,21.33,21.54,21.76,22.01,22.29,22.59,22.89,23.2,23.51,23.82,24.13,24.44,24.73,25.0,25.26,25.52,25.77,26.02,26.29,26.57,26.84,27.12,27.41,27.71,28.0,28.28,28.58,28.9,29.22,29.55,29.89,30.24,30.6,30.96,31.34,31.74,32.12,32.49,32.84,33.19,33.53,33.87,34.2,34.52,34.84,35.15,35.45,35.74,36.03,36.32,36.61,36.89,37.17,37.44,37.7,37.97,38.23,38.48,38.74,39.01,39.27,39.55,39.82,40.1,40.38,40.66,40.94,41.23,41.51,41.78,42.04,42.3,42.56,42.81,43.04,43.25,43.43,43.59,43.72,43.84,43.94,44.04,44.14,44.23,44.33,44.41,44.5,44.59,44.67,44.75,44.84,44.92,45.0,45.09,45.18,45.26,45.35,45.45,45.54,45.64,45.73,45.83,45.93,46.03,46.13,46.22,46.32,46.41,46.49,46.57,46.64,46.71,46.77]},{"id":2,"name":"Europe","color":"green","flag":"🌍","vals":[27.61,27.73,27.87,28.03,28.19,28.37,28.56,28.76,28.93,29.1,29.29,29.47,29.64,29.74,29.83,29.93,30.04,30.2,30.37,30.56,30.79,30.99,31.16,31.3,31.37,31.34,31.28,31.22,31.24,31.37,31.53,31.69,31.88,32.08,32.26,32.45,32.64,32.85,33.07,33.3,33.56,33.82,34.11,34.41,34.71,35.0,35.31,35.62,35.97,36.31,36.63,36.95,37.23,37.5,37.78,38.03,38.3,38.56,38.79,39.02,39.26,39.5,39.76,40.02,40.24,40.44,40.63,40.84,41.05,41.28,41.5,41.69,41.93,42.23,42.53,42.79,43.06,43.33,43.61,43.88,44.15,44.43,44.71,44.97,45.23,45.48,45.71,45.93,46.12,46.28,46.39,46.46,46.49,46.5,46.49,46.45,46.41,46.36,46.3,46.25,46.22,46.21,46.23,46.28,46.35,46.44,46.56,46.68,46.8,46.93,47.06,47.2,47.33,47.46,47.59,47.72,47.83,47.9,47.96,48.0,48.03,48.03,48.01,47.97,47.92,47.87,47.81,47.75,47.69,47.63,47.58,47.54,47.5,47.48,47.48,47.49,47.52,47.56,47.61,47.68,47.75,47.84,47.93,48.03,48.12,48.22,48.31,48.4,48.48,48.56,48.62]},{"id":3,"name":"Latin America","color":"orange","flag":"🌎","vals":[18.33,18.28,18.23,18.15,18.06,17.97,17.86,17.76,17.66,17.55,17.46,17.37,17.3,17.23,17.18,17.14,17.14,17.17,17.21,17.27,17.34,17.43,17.52,17.62,17.74,17.86,18.0,18.14,18.28,18.43,18.59,18.78,18.98,19.2,19.41,19.63,19.84,20.05,20.26,20.47,20.68,20.9,21.12,21.36,21.6,21.84,22.09,22.35,22.61,22.87,23.15,23.44,23.74,24.05,24.38,24.7,25.03,25.37,25.7,26.04,26.38,26.73,27.07,27.41,27.76,28.1,28.45,28.8,29.16,29.53,29.88,30.21,30.55,30.93,31.31,31.7,32.08,32.46,32.85,33.23,33.61,33.99,34.36,34.73,35.1,35.47,35.83,36.19,36.55,36.9,37.24,37.58,37.92,38.25,38.57,38.9,39.22,39.53,39.85,40.16,40.47,40.77,41.07,41.38,41.68,41.97,42.27,42.56,42.85,43.13,43.4,43.67,43.92,44.17,44.42,44.65,44.86,45.05,45.24,45.42,45.6,45.76,45.93,46.08,46.23,46.38,46.52,46.66,46.8,46.93,47.06,47.19,47.32,47.44,47.56,47.68,47.79,47.91,48.02,48.12,48.23,48.33,48.42,48.52,48.61,48.7,48.78,48.86,48.94,49.02,49.09]},{"id":4,"name":"North America","color":"violet","flag":"🌎","vals":[28.77,28.8,28.81,28.81,28.79,28.74,28.66,28.54,28.38,28.2,27.98,27.73,27.45,27.2,26.97,26.79,26.66,26.56,26.5,26.5,26.56,26.66,26.79,26.95,27.17,27.47,27.8,28.13,28.44,28.74,29.02,29.29,29.55,29.82,30.1,30.39,30.7,31.01,31.31,31.62,31.89,32.15,32.39,32.65,32.91,33.18,33.46,33.73,33.99,34.23,34.45,34.66,34.87,35.06,35.24,35.42,35.6,35.79,35.96,36.1,36.22,36.31,36.4,36.5,36.6,36.71,36.83,36.96,37.11,37.28,37.5,37.73,37.98,38.27,38.52,38.73,38.94,39.15,39.36,39.57,39.78,40.0,40.21,40.41,40.58,40.73,40.85,40.96,41.04,41.11,41.18,41.24,41.31,41.39,41.47,41.55,41.65,41.76,41.89,42.03,42.18,42.34,42.49,42.63,42.76,42.88,43.0,43.11,43.21,43.32,43.43,43.53,43.62,43.69,43.76,43.81,43.85,43.9,43.95,43.99,44.03,44.07,44.1,44.14,44.18,44.21,44.25,44.28,44.32,44.37,44.42,44.47,44.52,44.58,44.64,44.71,44.78,44.85,44.92,44.98,45.05,45.12,45.18,45.24,45.29,45.34,45.38,45.42,45.45,45.48,45.5]}];
+const S=D.map(d=>({...d,key:d.name}));
+const badge=(f,c,x="")=>`<span class="badge" style="--c:${col(c)}">${f}</span>`;
+const pl=Panel($("#stage"),{W:860,H:470,m:{l:58,r:22,t:14,b:44},y:[10,50,10],xt:[1950,1975,2000,2025,2050,2075,2100],xtitle:"Year",ytitle:"Median age (years)",series:S,label:"Median age by region, 1950 to 2100",
+ onHover:(y,e,i)=>{const rows=S.filter(s=>!pl.S.find(a=>a.s===s).g.classList.contains("off")).sort((a,b)=>b.vals[i]-a.vals[i]);
+  showTip(`<div class="h"><div><b>${y}</b><small>${y>PROJ?"Projection":"Observed data"}</small></div></div>`+rows.map(s=>`<div class="r">${badge(s.flag,s.color)}<span>${s.name}</span><strong>${fmt(s.vals[i])}</strong></div>`).join(""),e)}});
+P.subs.push(pl.draw);
+$("#chips").innerHTML=S.map(s=>`<button class="chip" style="--c:${col(s.color)}" data-k="${s.key}" aria-pressed="true"><i></i>${s.name}</button>`).join("");
+document.querySelectorAll("#chips .chip").forEach(b=>b.onclick=()=>{const off=!b.classList.toggle("off");b.setAttribute("aria-pressed",off);pl.show(b.dataset.k,off)});
+start();
+</script></body></html>
